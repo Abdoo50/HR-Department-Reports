@@ -4,14 +4,48 @@
 This report is designed to assist the HR department in managing employee absenteeism. With a large number of employees, it is crucial to monitor absenteeism patterns to maintain work quality and take necessary actions.
 
 ## Solution Approach
-The analysis was conducted using SQL Server for data analysis, followed by data visualization and dashboard creation in Power BI. Two dashboards were developed to provide comprehensive insights:
+The analysis was conducted using SQL Server for data extraction and transformation, followed by data visualization and dashboard creation in Power BI. Direct Query was used to connect between SQL Server and Power BI, ensuring real-time data analysis. Two dashboards were developed to provide comprehensive insights:
 
 - [Absenteeism Analysis Performance](https://github.com/Abdoo50/HR-Department-Reports/blob/main/Absenteesm%20Analysis%20Performance.png)
 - [Reasons and Employee Report](https://github.com/Abdoo50/HR-Department-Reports/blob/main/Reasons%20and%20Employee%20Report.png)
 
+### SQL Query Used
+```sql
+Select 
+a.ID,
+r.Reason,
+Case	When Body_mass_index < 18.5 Then 'Underweight'
+		When Body_mass_index between 18.5 and 25 Then 'Healthy Weight'
+		When Body_mass_index between 25 and 30 Then 'Over Weight'
+		Else 'Obese' End as BMI_Category,		-- is a person's weight in kilograms divided by the square of height in meters
+
+Case	When Month_of_absence IN (12, 1, 2) Then 'Winter'
+		When Month_of_absence IN (3, 4, 5) Then 'Spring'
+		When Month_of_absence IN (6, 7, 8) Then 'Summer'
+		When Month_of_absence IN (9, 10, 11) Then 'Fall'
+		Else 'Unknown' End as Season_Names,		-- Here we Segment the 4 Seasons
+Month_of_absence,
+Day_of_the_week,
+Transportation_expense,
+Son,
+Social_drinker,
+Social_smoker,
+Pet,
+Disciplinary_failure,
+Age,
+Work_load_Average_day,
+Hit_target,
+Distance_from_Residence_to_Work,
+Absenteeism_time_in_hours
+From Absenteeism_at_work a
+left join compensation c
+on a.ID = c.ID
+left join Reasons r on a.Reason_for_absence = r.number
+```
+
 ## Tools Used
 - **SQL Server**: For data extraction, transformation, and analysis.
-- **Power BI**: For creating interactive dashboards.
+- **Power BI**: For creating interactive dashboards using Direct Query for real-time data analysis.
 
 ## Insights and Recommendations
 ### Absenteeism Analysis Performance Dashboard
